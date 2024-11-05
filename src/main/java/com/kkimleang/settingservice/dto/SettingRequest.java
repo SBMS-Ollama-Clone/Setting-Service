@@ -1,4 +1,4 @@
-package com.example.settingservice.dto;
+package com.kkimleang.settingservice.dto;
 
 import lombok.Getter;
 import lombok.Setter;

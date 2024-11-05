@@ -1,6 +1,6 @@
-package com.example.settingservice.repository;
+package com.kkimleang.settingservice.repository;
 
-import com.example.settingservice.model.Setting;
+import com.kkimleang.settingservice.model.Setting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

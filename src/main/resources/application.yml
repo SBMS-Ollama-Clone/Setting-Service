@@ -1,6 +1,8 @@
 server:
   port: 9992
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: Setting-Service
   config:
@@ -16,3 +18,9 @@ spring:
     password: ${DATASOURCE_PASSWORD:postgres}
     hikari:
       schema: public
+  jpa:
+    show-sql: true
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URIS:http://localhost:9200}
+    username: ${ELASTICSEARCH_USERNAME:elastic}
+    password: ${ELASTICSEARCH_PASSWORD:changeme}

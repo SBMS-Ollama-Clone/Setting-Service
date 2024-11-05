@@ -1,13 +1,16 @@
-package com.example.settingservice.controller;
+package com.kkimleang.settingservice.controller;
 
-import com.example.settingservice.dto.Response;
-import com.example.settingservice.dto.SettingRequest;
-import com.example.settingservice.dto.SettingResponse;
-import com.example.settingservice.model.Setting;
-import com.example.settingservice.repository.SettingRepository;
+import com.kkimleang.settingservice.dto.Response;
+import com.kkimleang.settingservice.dto.SettingRequest;
+import com.kkimleang.settingservice.dto.SettingResponse;
+import com.kkimleang.settingservice.elastic.SettingSearchRepository;
+import com.kkimleang.settingservice.model.Setting;
+import com.kkimleang.settingservice.repository.SettingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -15,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SettingController {
     private final SettingRepository settingRepository;
+    private final SettingSearchRepository settingSearchRepository;
 
     @GetMapping("/of-users/{userId}")
     public Response<SettingResponse> getSettingByUserId(@PathVariable String userId) {
@@ -47,10 +51,24 @@ public class SettingController {
             setting.setSystemPrompt(settingRequest.getSystemPrompt());
             setting.setUserId(settingRequest.getUserId());
             Setting savedSetting = settingRepository.save(setting);
+            savedSetting = settingSearchRepository.save(savedSetting);
             return Response.<SettingResponse>ok()
                     .setPayload(SettingResponse.fromSetting(savedSetting));
         } catch (Exception e) {
             return Response.<SettingResponse>exception()
+                    .setErrors(e.getMessage());
+        }
+    }
+
+    @GetMapping
+    public Response<List<SettingResponse>> getAllSettings(@RequestParam int page, @RequestParam int size) {
+        try {
+            Pageable pageable = Pageable.ofSize(size).withPage(page);
+            List<Setting> settings = settingSearchRepository.findAll(pageable).getContent();
+            return Response.<List<SettingResponse>>ok()
+                    .setPayload(SettingResponse.fromSettings(settings));
+        } catch (Exception e) {
+            return Response.<List<SettingResponse>>exception()
                     .setErrors(e.getMessage());
         }
     }

@@ -1,4 +1,4 @@
-package com.example.settingservice.dto;
+package com.kkimleang.settingservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
